@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Details</title>
+  <style>
+/* Reset and Base Styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: url('travel.jpg') no-repeat center center fixed;
+  background-size: cover; 
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 80px;
+  padding-bottom: 20px;
+}
+
+/* Overlay for better readability */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+}
+
+/* Header Styling */
+.header {
+  width: 100%;
+  background: rgba(0, 64, 128, 0.9);
+  padding: 15px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.header h1 {
+  color: #ffffff;
+  font-size: 2em; /* Increased font size */
+  letter-spacing: 1px; /* Added letter spacing for a cleaner look */
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px; /* Increased spacing */
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600; /* Increased font weight */
+  padding: 10px 15px; /* Adjusted padding */
+  border-radius: 5px;
+  transition: background 0.3s ease, transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05); /* Hover effect for scale */
+}
+
+/* Main Content Styling */
+.weather-details {
+  position: relative; 
+  z-index: 2;
+  width: 95%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: none; /* Removed shadow */
+  text-align: center;
+  margin: 20px;
+}
+
+.weather-details h2 {
+  color: #004080;
+  font-size: 2.5em; /* Increased font size */
+  margin-bottom: 20px;
+  font-weight: bold; /* Bold title */
+}
+
+.current-weather, .weather-forecast, .recommendations, .hourly-forecast {
+  margin-bottom: 2em;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Retained shadow for inner sections */
+  background: #f0f4f8; /* Lighter background */
+}
+
+/* Current Weather */
+.current-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1.3em; /* Increased font size */
+  font-weight: 500; /* Semi-bold */
+}
+
+/* Weather Forecast */
+.weather-forecast {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.day-forecast {
+  padding: 15px;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.day-forecast:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced hover effect */
+}
+
+.day-forecast img {
+  width: 60px; /* Increased icon size */
+  margin-bottom: 0.5em;
+}
+
+/* Hourly Forecast */
+.hourly-forecast {
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#hourlyForecast {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding-top: 10px;
+  scroll-behavior: smooth;
+}
+
+.hourly-forecast-item {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  min-width: 120px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.hourly-forecast-item img {
+  width: 40px; /* Increased icon size */
+  margin-bottom: 10px;
+}
+
+/* Recommendations */
+#recommendationContainer {
+  background: #e3f2fd;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#recommendationText {
+  font-size: 1.2em; /* Increased font size */
+  color: #333;
+  margin-bottom: 15px;
+  line-height: 1.6em;
+}
+
+#recommendationImage {
+  width: 200px; /* Increased image size */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+#recommendationImage:hover {
+  transform: scale(1.1); /* Increased hover effect */
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .weather-details {
+    padding: 20px;
+  }
+
+  .current-weather {
+    padding: 1em;
+  }
+
+  .day-forecast {
+    min-width: 100px;
+    padding: 0.8em;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Safe Voyager</h1>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="weatherDetails.html">Weather Information</a>
+      <a href="CRUD.html">Travel Itineraries</a>
+    </div>
+  </div>
+
+  <div class="weather-details">
+    <h2>Today's Weather</h2>
+
+    <div id="currentWeatherContainer" class="current-weather">
+      <!-- Current weather data will go here -->
+      <p><strong>Temperature:</strong> 26°C</p>
+      <p><strong>Humidity:</strong> 60%</p>
+      <p><strong>Wind Speed:</strong> 12 km/h</p>
+    </div>
+
+    <div id="weatherForecastContainer" class="weather-forecast">
+      <!-- Weather forecast for upcoming days -->
+      <div class="day-forecast">
+        <img src="icon.png" alt="Weather Icon">
+        <p>Monday</p>
+        <p>25°C</p>
+      </div>
+      <!-- Add more day-forecast items as needed -->
+    </div>
+
+    <div class="hourly-forecast">
+      <h3>Hourly Forecast for Today</h3>
+      <div id="hourlyForecast">
+        <div class="hourly-forecast-item">
+          <img src="icon.png" alt="Weather Icon">
+          <p>10 AM</p>
+          <p>25°C</p>
+        </div>
+        <!-- Repeat similar items as needed -->
+      </div>
+    </div>
+
+    <div class="recommendations" id="recommendationContainer">
+      <h3>Weather Outfit Recommendations</h3>
+      <p id="recommendationText">Stay hydrated and wear light clothing if it’s sunny!</p>
+      <img id="recommendationImage" src="recommendation.png" alt="Weather recommendation image">
+    </div>
+  </div>
+
+  <!-- Link to external JavaScript file -->
+  <script src="main.js"></script>
+</body>
+</html>
